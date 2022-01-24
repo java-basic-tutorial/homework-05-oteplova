@@ -3,6 +3,8 @@ package com.softserveinc.task02;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Task02 {
 
@@ -20,32 +22,59 @@ public class Task02 {
 
     static List<Employee> ex01() {
         // TODO: find and return list of all male employee with aged 18 to 27 (inclusive)
-        return null;
+
+        return EMPLOYEES
+                .stream()
+                .filter(Employee -> Employee.getGender() == Gender.MAN)
+                .filter(Employee -> Employee.getAge() >= 18 && Employee.getAge() <= 27)
+                .collect(Collectors.toList());
     }
 
     static double ex02() {
         // TODO: compute the average age of all male
-        return 0L;
+        return EMPLOYEES
+                .stream()
+                .filter(Employee -> Employee.getGender() == Gender.MAN)
+                .mapToInt(Employee -> Employee.getAge())
+                .average().getAsDouble();
     }
 
     static long ex03() {
         // TODO: count how many employees are male aged 18 to 60 and women aged 18 to 55
-        return 0L;
+        return EMPLOYEES
+                .stream()
+                .filter(Employee -> Employee.getAge()>=18)
+                .filter(Employee -> {
+                    switch (Employee.getGender()){
+                        case MAN: return Employee.getAge()<=60;
+                        case WOMEN: return Employee.getAge()<=55;
+                    }return false;
+                })
+                .count();
     }
 
     static List<Employee> ex04() {
         // TODO: return the list of employees was sort employee by name in descending order
-        return null;
+        return EMPLOYEES
+                .stream()
+                .sorted((employeeA, employeeB) -> employeeB.getName().compareTo(employeeA.getName()))
+                .collect(Collectors.toList());
     }
 
     static Employee ex05() {
         // TODO: find and return the oldest employee
-        return null;
+        return EMPLOYEES
+                .stream()
+                .max((employeeA, employeeB) -> employeeA.getAge() - employeeB.getAge())
+                .get();
     }
 
     static Employee ex06() {
         // TODO: find and return the youngest employee
-        return null;
+        return EMPLOYEES
+                .stream()
+                .min((employeeA, employeeB) -> employeeA.getAge() - employeeB.getAge())
+                .get();
     }
 
     public static void main(String[] args) {
